@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stopwatch</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            text-align: center;
+            padding-top: 100px;
+        }
+
+        .stopwatch {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .start { background-color: #4CAF50; color: white; }
+        .pause { background-color: #FFC107; color: black; }
+        .reset { background-color: #F44336; color: white; }
+        .lap   { background-color: #2196F3; color: white; }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 5px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Stopwatch</h1>
+
+    <div class="stopwatch" id="display">00:00:00</div>
+
+    <button class="start" onclick="start()">Start</button>
+    <button class="pause" onclick="pause()">Pause</button>
+    <button class="reset" onclick="reset()">Reset</button>
+    <button class="lap" onclick="lap()">Lap</button>
+
+    <ul id="laps"></ul>
+
+    <script>
+        let timer = null;
+        let milliseconds = 0;
+        let seconds = 0;
+        let minutes = 0;
+
+        function updateDisplay() {
+            document.getElementById("display").innerText =
+                (minutes < 10 ? "0" : "") + minutes + ":" +
+                (seconds < 10 ? "0" : "") + seconds + ":" +
+                (milliseconds < 10 ? "0" : "") + milliseconds;
+        }
+
+        function start() {
+            if (timer !== null) return;
+
+            timer = setInterval(() => {
+                milliseconds++;
+                if (milliseconds === 100) {
+                    milliseconds = 0;
+                    seconds++;
+                }
+                if (seconds === 60) {
+                    seconds = 0;
+                    minutes++;
+                }
+                updateDisplay();
+            }, 10);
+        }
+
+        function pause() {
+            clearInterval(timer);
+            timer = null;
+        }
+
+        function reset() {
+            pause();
+            milliseconds = 0;
+            seconds = 0;
+            minutes = 0;
+            updateDisplay();
+            document.getElementById("laps").innerHTML = "";
+        }
+
+        function lap() {
+            let lapTime = document.createElement("li");
+            lapTime.innerText = document.getElementById("display").innerText;
+            document.getElementById("laps").appendChild(lapTime);
+        }
+    </script>
+
+</body>
+</html>
